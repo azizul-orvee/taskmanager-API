@@ -13,7 +13,7 @@ app.get('/hello', (req, res) => {
 app.use('/api/v1/tasks', tasks)
 
 
-const PORT = 5000
+const PORT = process.env.PORT
 
 const start = async () => {
     try {

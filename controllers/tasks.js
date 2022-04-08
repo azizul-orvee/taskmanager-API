@@ -1,3 +1,4 @@
+const res = require('express/lib/response')
 const Task = require('../models/Task')
 
 const getAllTasks = async (req, res) => {
@@ -34,18 +35,32 @@ const getTask = async (req, res) => {
     }
 }
 
-const updateTask = (req, res) => {
-    res.json({id: req.params.id})
+
+const deleteTask= async (req, res) => {
+    try {
+        const {id:taskID} = req.params
+        await Task.findOneAndDelete({_id: taskID})
+        res.status(200).json({msg: "delte successful"})
+    } catch (error) {
+        res.status(500).json({msg: error})
+    }
+}
+
+const updateTask = async (req, res) => {
+    try {
+        const {id: taskID} =req.params;
+        const task = await Task.findOneAndUpdate({_id: taskID}, req.body, {
+            new: true,
+            runValidators: true
+        })
+        res.status(200).json({task})
+    } catch (error) {
+        res.status(500).json({msg: error})
+    }
     
 }
 
-const deleteTask= (req, res) => {
-    try {
-        
-    } catch (error) {
-        
-    }
-}
+
 
 module.exports = {
     getAllTasks,
